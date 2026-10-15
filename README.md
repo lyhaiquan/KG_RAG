@@ -34,6 +34,14 @@ pip install -r requirements.txt
 python app.py
 ```
 
+Link dạng `http://localhost:7860/?domain=gold&q=How%20do%20Fed%20rate%20cuts%20affect%20gold%3F` mở sẵn câu hỏi và trả lời ngay (`domain` = `diabetes` | `stocks` | `gold`, thêm `&mode=rag` để so với RAG thường).
+
+## Demo
+
+| Tiểu đường | Chứng khoán | Vàng |
+|---|---|---|
+| ![](docs/demo/demo_diabetes.png) | ![](docs/demo/demo_stocks.png) | ![](docs/demo/demo_gold.png) |
+
 ## Phương pháp
 
 - **KG:** thực thể nhận diện bằng từ điển + regex. Quan hệ lấy từ 3 nguồn: đồng xuất hiện trong văn bản, tương quan lợi suất tính từ bảng, và tri thức chuyên gia (bài vàng).

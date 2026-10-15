@@ -17,11 +17,20 @@ def ask(domain, question, mode, k):
     facts = "\n".join(r["kg_facts"]) or "(RAG thường: không dùng KG)"
     return r["answer"], ", ".join(r["sources"]), ", ".join(r["query_entities"]) + " -> " + ", ".join(r["graph_expansion"]), facts
 
+SLUG = {"diabetes": "Tiểu đường", "stocks": "Chứng khoán", "gold": "Vàng"}
+def from_url(request: gr.Request):
+    # link dạng ?domain=gold&q=...&mode=rag mở sẵn câu hỏi và trả lời ngay (dùng để chia sẻ demo)
+    p = dict(request.query_params) if request else {}
+    d = SLUG.get(p.get("domain"), "Tiểu đường")
+    q = p.get("q") or EXAMPLES[d]
+    m = "RAG" if p.get("mode") == "rag" else "GraphRAG"
+    return (d, q, m, *ask(d, q, m, 4))
+
 with gr.Blocks(title="KG + RAG") as demo:
     gr.Markdown("# Knowledge Graph + RAG: tiểu đường, chứng khoán, vàng\nHỏi bằng tiếng Anh (kho dữ liệu là tiếng Anh).")
     domain = gr.Dropdown(list(SYSTEMS), value="Tiểu đường", label="Bài")
     question = gr.Textbox(label="Câu hỏi", value=EXAMPLES["Tiểu đường"])
-    domain.change(lambda d: EXAMPLES[d], domain, question)
+    domain.input(lambda d: EXAMPLES[d], domain, question)
     with gr.Row():
         mode = gr.Radio(["GraphRAG", "RAG"], value="GraphRAG", label="Chế độ")
         k = gr.Slider(1, 8, value=4, step=1, label="top-k")
@@ -29,6 +38,7 @@ with gr.Blocks(title="KG + RAG") as demo:
     ans, src = gr.Textbox(label="Câu trả lời", lines=6), gr.Textbox(label="Nguồn")
     ent, facts = gr.Textbox(label="Thực thể -> mở rộng KG"), gr.Textbox(label="Facts từ KG", lines=5)
     btn.click(ask, [domain, question, mode, k], [ans, src, ent, facts])
+    demo.load(from_url, None, [domain, question, mode, ans, src, ent, facts])
 
 if __name__ == "__main__":
     demo.launch()
