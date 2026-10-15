@@ -18,6 +18,10 @@ deploy/
   app.py               giao diện Gradio cho cả 3 bài
   *.json               KB + KG + từ điển của từng bài
   requirements.txt
+results/summary.json   số liệu chính do notebook ghi ra
+figs/                  hình do notebook vẽ
+tools/build_report.py  sinh báo cáo (.md -> .docx -> .pdf, cần pandoc + Word)
+A05_07_quanlh.676.docx / .pdf   báo cáo
 ```
 
 ## Chạy trên Kaggle

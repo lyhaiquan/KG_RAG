@@ -4,3 +4,4 @@ __pycache__/
 *.graphml
 .claude/
 demo_tmp/
+/ragkg_core.py
